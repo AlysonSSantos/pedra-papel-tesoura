@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Pedra, papel ou tesoura</title>
+	<style>
+		*{
+			font-family:  arial;
+			margin: 0;
+			padding: 0;
+		}
+		header h1{
+			text-align: center;
+			font-size: 1.8rem;
+			padding: 1.5rem 1rem;
+			color:  #fff;
+			text-transform:  uppercase;
+		}
+		header{
+			background: #13a352;
+		}
+		.container{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		.player-options img:hover{
+			cursor: pointer;
+		}
+		.player-options img, .enemy-options img{
+			width: 9rem;
+			margin: 1rem 2.5rem;
+			opacity: .3;
+		}
+		#player h1{
+			color: green;
+			position: absolute;
+			left: 0rem;
+			background: #2b2b2b;
+			padding: .5rem 1rem;
+			border-radius: 0 1rem 1rem 0;
+		}
+		#enemy h1{
+			color:  red;
+			position: absolute;
+			right: 0rem;
+			background: #2b2b2b;
+			padding: .5rem 1rem;
+			border-radius: 1rem 0 0 1rem;
+		}
+		footer, footer a{
+			text-align: center;
+			color:  #000;
+			padding: .5rem 1rem;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Pedra, papel ou tesoura</h1>
+	</header>
+
+	<div class="container">
+
+		<div class="victoryCount">
+
+			<div id="player">
+				<h1>0</h1>
+			</div>
+
+			<div id="enemy">
+				<h1>0</h1>
+			</div>
+
+		</div>
+		
+		<div class="player-options">
+			<div><img option='pedra' src="pictures/pedra.png" alt="pedra - game opition"></div>
+			<div><img option='papel' src="pictures/papel.png" alt="papel - game opition"></div>
+			<div><img option='tesoura' src="pictures/tesoura.png" alt="tesoura - game opition"></div>
+		</div>
+
+		<div class="enemy-options">
+			<div><img option='pedra' src="pictures/pedra.png" alt="pedra - game opition"></div>
+			<div><img option='papel' src="pictures/papel.png" alt="papel - game opition"></div>
+			<div><img option='tesoura' src="pictures/tesoura.png" alt="tesoura - game opition"></div>
+		</div>
+
+
+	</div>
+
+	<footer>
+		<p>by <a href="#">Alyson S.</a></p>
+	</footer>
+
+	<script>
+		var playerOptions = document.querySelectorAll(".player-options > div > img")
+		var enemyOptions = document.querySelectorAll(".enemy-options > div")
+		var countPlayer = document.querySelector("#player")
+		var countEnemy = document.querySelector("#enemy")
+		var playerOptionSelected = ''
+		var enemyOptionSelected = ''
+		var countP= 0
+		var countE= 0
+
+
+		function resetOpacity(){
+			for(var i = 0; i < playerOptions.length; i++){
+				playerOptions[i].style.opacity = .3
+			}
+		}
+
+		function resetEnemy(){
+			for(var i = 0; i < enemyOptions.length; i++){
+					enemyOptions[i].childNodes[0].style.opacity=.3
+			}
+		}
+
+		function victoryCount(winer){
+			switch (winer) {
+				case 'enemy':
+					countE += 1
+					countEnemy.innerHTML = `
+					<h1>`+countE+`</h1>
+					` 
+				break; 
+
+				case 'player':
+					countP += 1
+					countPlayer.innerHTML =`
+					<h1>`+countP+`</h1>
+					`
+				break
+			}
+		}
+
+		function result(){
+
+			if(enemyOptionSelected==="pedra" && playerOptionSelected==="tesoura"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('enemy')
+				},1000)
+			}
+			if(enemyOptionSelected==="papel" && playerOptionSelected==="pedra"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('enemy')
+				},1000)
+			}
+			if(enemyOptionSelected==="tesoura" && playerOptionSelected==="papel"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('enemy')
+				},1000)
+			}
+			if(playerOptionSelected==="pedra" && enemyOptionSelected==="tesoura"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('player')
+				},1000)
+			}
+			if(playerOptionSelected==="papel" && enemyOptionSelected==="pedra"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('player')
+				},1000)
+			}
+			if(playerOptionSelected==="tesoura" && enemyOptionSelected==="papel"){
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+					victoryCount('player')
+				},1000)
+			}
+
+			else{
+				setTimeout(()=>{
+					resetOpacity()
+					resetEnemy()
+				},1000)
+			}
+
+		}
+
+		function enemyPlay(){
+			let random = Math.floor(Math.random()*3)
+
+			for(var i = 0; i < enemyOptions.length; i++){
+				if(i === random){
+					resetEnemy()
+					enemyOptions[i].childNodes[0].style.opacity=1
+					enemyOptionSelected = enemyOptions[i].childNodes[0].getAttribute("option")
+					result()
+				}
+			}
+		}
+
+		for(var i = 0; i < playerOptions.length; i++){
+			playerOptions[i].addEventListener('click',(t) => {
+				resetOpacity()
+				t.target.style.opacity = 1
+				playerOptionSelected = t.target.getAttribute("option")
+				enemyPlay()
+			})
+		}
+	</script>
+</body>
+</html>
